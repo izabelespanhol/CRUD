@@ -1,5 +1,7 @@
 const mysql = require('mysql2/promise');
 
+// Supondo que o pool esteja definido em outro lugar e importado aqui
+const pool = require('./dbPool'); // Ajuste o caminho conforme necessário
 
 const usuarioController = {
     createusuario: async (req, res) => {
@@ -11,7 +13,8 @@ const usuarioController = {
             );
             res.redirect('/usuarios');
         } catch (err) {
-            res.status(500).json({ error: err.message });
+            console.error(err); // Log do erro para depuração
+            res.status(500).json({ error: 'Failed to create user' });
         }
     },
 
@@ -20,11 +23,12 @@ const usuarioController = {
         try {
             const [rows] = await pool.query('SELECT * FROM usuario WHERE cod = ?', [usuarioId]);
             if (rows.length === 0) {
-                return res.status(404).json({ message: 'usuario not found' });
+                return res.status(404).json({ message: 'User not found' });
             }
             res.render('usuarios/show', { usuario: rows[0] });
         } catch (err) {
-            res.status(500).json({ error: err.message });
+            console.error(err); // Log do erro para depuração
+            res.status(500).json({ error: 'Failed to retrieve user' });
         }
     },
 
@@ -33,7 +37,8 @@ const usuarioController = {
             const [rows] = await pool.query('SELECT * FROM usuario');
             res.render('usuarios/index', { usuarios: rows });
         } catch (err) {
-            res.status(500).json({ error: err.message });
+            console.error(err); // Log do erro para depuração
+            res.status(500).json({ error: 'Failed to retrieve users' });
         }
     },
 
@@ -46,11 +51,12 @@ const usuarioController = {
         try {
             const [rows] = await pool.query('SELECT * FROM usuario WHERE cod = ?', [usuarioId]);
             if (rows.length === 0) {
-                return res.status(404).json({ message: 'usuario not found' });
+                return res.status(404).json({ message: 'User not found' });
             }
             res.render('usuarios/edit', { usuario: rows[0] });
         } catch (err) {
-            res.status(500).json({ error: err.message });
+            console.error(err); // Log do erro para depuração
+            res.status(500).json({ error: 'Failed to retrieve user for editing' });
         }
     },
 
@@ -64,7 +70,8 @@ const usuarioController = {
             );
             res.redirect('/usuarios');
         } catch (err) {
-            res.status(500).json({ error: err.message });
+            console.error(err); // Log do erro para depuração
+            res.status(500).json({ error: 'Failed to update user' });
         }
     },
 
@@ -74,10 +81,10 @@ const usuarioController = {
             await pool.query('DELETE FROM usuario WHERE cod = ?', [usuarioId]);
             res.redirect('/usuarios');
         } catch (err) {
-            res.status(500).json({ error: err.message });
+            console.error(err); // Log do erro para depuração
+            res.status(500).json({ error: 'Failed to delete user' });
         }
     },
 };
 
 module.exports = usuarioController;
-
