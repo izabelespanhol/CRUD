@@ -1,5 +1,11 @@
 <h1>User Details</h1>
-<p>ID: <%= user.id %></p>
-<p>Username: <%= user.username %></p>
-<p>Role: <%= user.role %></p>
-<a href="/users" class="btn btn-primary">Back to List</a>
+<p>ID: <%= usuario.cod %></p>
+<p>Name: <%= usuario.nome %></p>
+<p>Date of Birth: <%= usuario.datanascimento %></p>
+<p>Login: <%= usuario.login %></p>
+<p>Phone: <%= usuario.fone %></p>
+<p>Document: <%= usuario.documento %></p>
+<p>Gender: <%= usuario.genero %></p>
+<p>Admin: <%= usuario.adm ? 'Yes' : 'No' %></p>
+<p>Address ID: <%= usuario.endereco %></p>
+<a href="/usuarios" class="btn btn-primary">Voltar à Lista</a>

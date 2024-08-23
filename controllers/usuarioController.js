@@ -1,89 +1,102 @@
-const mysql = require('mysql2/promise');
-
-// Supondo que o pool esteja definido em outro lugar e importado aqui
-const pool = require('./dbPool'); // Ajuste o caminho conforme necessário
+const Usuario = require('../models/usuarioModel');
 
 const usuarioController = {
-    createusuario: async (req, res) => {
-        const { datanascimento, senha, login, fone, documento, genero, adm, nome, endereco } = req.body;
-        try {
-            const [result] = await pool.query(
-                'INSERT INTO usuario (datanascimento, senha, login, fone, documento, genero, adm, nome, endereco) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
-                [datanascimento, senha, login, fone, documento, genero, adm, nome, endereco]
-            );
-            res.redirect('/usuarios');
-        } catch (err) {
-            console.error(err); // Log do erro para depuração
-            res.status(500).json({ error: 'Failed to create user' });
-        }
-    },
+    createUsuario: (req, res) => {
+        const newUser = {
+            datanascimento: req.body.datanascimento,
+            senha: req.body.senha,
+            login: req.body.login,
+            fone: req.body.fone,
+            documento: req.body.documento,
+            genero: req.body.genero,
+            nome: req.body.nome,
+        };
 
-    getusuarioById: async (req, res) => {
-        const usuarioId = req.params.id;
-        try {
-            const [rows] = await pool.query('SELECT * FROM usuario WHERE cod = ?', [usuarioId]);
-            if (rows.length === 0) {
-                return res.status(404).json({ message: 'User not found' });
+        Usuario.create(newUser, (err, userId) => {
+            if (err) {
+                console.error('Erro ao criar usuário:', err);
+                return res.status(500).json({ error: 'Erro ao criar usuário.' });
             }
-            res.render('usuarios/show', { usuario: rows[0] });
-        } catch (err) {
-            console.error(err); // Log do erro para depuração
-            res.status(500).json({ error: 'Failed to retrieve user' });
-        }
+            res.redirect('/usuarios');
+        });
     },
 
-    getAllusuarios: async (req, res) => {
-        try {
-            const [rows] = await pool.query('SELECT * FROM usuario');
-            res.render('usuarios/index', { usuarios: rows });
-        } catch (err) {
-            console.error(err); // Log do erro para depuração
-            res.status(500).json({ error: 'Failed to retrieve users' });
-        }
+    getUsuarioById: (req, res) => {
+        const userId = req.params.id;
+
+        Usuario.findById(userId, (err, usuario) => {
+            if (err) {
+                console.error('Erro ao buscar usuário:', err);
+                return res.status(500).json({ error: 'Erro ao buscar usuário.' });
+            }
+            if (!usuario) {
+                return res.status(404).json({ message: 'Usuário não encontrado' });
+            }
+            res.render('usuarios/show', { usuario });
+        });
+    },
+
+    getAllUsuarios: (req, res) => {
+        Usuario.getAll((err, usuarios) => {
+            if (err) {
+                console.error('Erro ao listar usuários:', err);
+                return res.status(500).json({ error: 'Erro ao listar usuários.' });
+            }
+            console.log('Usuários:', usuarios); // Para depuração
+            res.render('usuarios/index', { usuarios });
+        });
     },
 
     renderCreateForm: (req, res) => {
         res.render('usuarios/create');
     },
 
-    renderEditForm: async (req, res) => {
-        const usuarioId = req.params.id;
-        try {
-            const [rows] = await pool.query('SELECT * FROM usuario WHERE cod = ?', [usuarioId]);
-            if (rows.length === 0) {
-                return res.status(404).json({ message: 'User not found' });
+    renderEditForm: (req, res) => {
+        const userId = req.params.id;
+
+        Usuario.findById(userId, (err, usuario) => {
+            if (err) {
+                console.error('Erro ao buscar usuário para edição:', err);
+                return res.status(500).json({ error: 'Erro ao buscar usuário.' });
             }
-            res.render('usuarios/edit', { usuario: rows[0] });
-        } catch (err) {
-            console.error(err); // Log do erro para depuração
-            res.status(500).json({ error: 'Failed to retrieve user for editing' });
-        }
+            if (!usuario) {
+                return res.status(404).json({ message: 'Usuário não encontrado' });
+            }
+            res.render('usuarios/edit', { usuario });
+        });
     },
 
-    updateusuario: async (req, res) => {
-        const usuarioId = req.params.id;
-        const { datanascimento, senha, login, fone, documento, genero, adm, nome, endereco } = req.body;
-        try {
-            await pool.query(
-                'UPDATE usuario SET datanascimento = ?, senha = ?, login = ?, fone = ?, documento = ?, genero = ?, adm = ?, nome = ?, endereco = ? WHERE cod = ?',
-                [datanascimento, senha, login, fone, documento, genero, adm, nome, endereco, usuarioId]
-            );
+    updateUsuario: (req, res) => {
+        const userId = req.params.id;
+        const updatedUsuario = {
+            datanascimento: req.body.datanascimento,
+            senha: req.body.senha,
+            login: req.body.login,
+            fone: req.body.fone,
+            documento: req.body.documento,
+            genero: req.body.genero,
+            nome: req.body.nome,
+        };
+
+        Usuario.update(userId, updatedUsuario, (err) => {
+            if (err) {
+                console.error('Erro ao atualizar usuário:', err);
+                return res.status(500).json({ error: 'Erro ao atualizar usuário.' });
+            }
             res.redirect('/usuarios');
-        } catch (err) {
-            console.error(err); // Log do erro para depuração
-            res.status(500).json({ error: 'Failed to update user' });
-        }
+        });
     },
 
-    deleteusuario: async (req, res) => {
-        const usuarioId = req.params.id;
-        try {
-            await pool.query('DELETE FROM usuario WHERE cod = ?', [usuarioId]);
+    deleteUsuario: (req, res) => {
+        const userId = req.params.id;
+
+        Usuario.delete(userId, (err) => {
+            if (err) {
+                console.error('Erro ao deletar usuário:', err);
+                return res.status(500).json({ error: 'Erro ao deletar usuário.' });
+            }
             res.redirect('/usuarios');
-        } catch (err) {
-            console.error(err); // Log do erro para depuração
-            res.status(500).json({ error: 'Failed to delete user' });
-        }
+        });
     },
 };
 

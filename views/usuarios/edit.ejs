@@ -1,19 +1,56 @@
-<h1>Edit User</h1>
-<form action="/users/<%= user.id %>?_method=PUT" method="POST">
-    <div class="form-group">
-        <label for="username">Username</label>
-        <input type="text" class="form-control" id="username" name="username" value="<%= user.username %>" required>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Usuário</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1>Editar Usuário</h1>
+        <form action="/usuarios/<%= usuario.cod %>?_method=PUT" method="POST">
+            <div class="form-group">
+                <label for="nome">Nome</label>
+                <input type="text" class="form-control" id="nome" name="nome" value="<%= usuario.nome %>" required>
+            </div>
+            <div class="form-group">
+                <label for="datanascimento">Data de Nascimento</label>
+                <input type="date" class="form-control" id="datanascimento" name="datanascimento" value="<%= usuario.datanascimento %>" required>
+            </div>
+            <div class="form-group">
+                <label for="login">Login</label>
+                <input type="text" class="form-control" id="login" name="login" value="<%= usuario.login %>" required>
+            </div>
+            <div class="form-group">
+                <label for="senha">Senha</label>
+                <input type="password" class="form-control" id="senha" name="senha" placeholder="Deixe em branco para manter a mesma senha">
+            </div>
+            <div class="form-group">
+                <label for="fone">Telefone</label>
+                <input type="tel" class="form-control" id="fone" name="fone" value="<%= usuario.fone %>">
+            </div>
+            <div class="form-group">
+                <label for="documento">Documento</label>
+                <input type="text" class="form-control" id="documento" name="documento" value="<%= usuario.documento %>">
+            </div>
+            <div class="form-group">
+                <label for="genero">Gênero</label>
+                <input type="text" class="form-control" id="genero" name="genero" value="<%= usuario.genero %>">
+            </div>
+            <div class="form-group">
+                <label for="endereco">Endereço</label>
+                <input type="number" class="form-control" id="endereco" name="endereco" value="<%= usuario.endereco %>">
+            </div>
+            <div class="form-group">
+                <label for="adm">Admin</label>
+                <input type="checkbox" id="adm" name="adm" <%= usuario.adm ? 'checked' : '' %>>
+            </div>
+            <button type="submit" class="btn btn-warning">Atualizar</button>
+        </form>
     </div>
-    <div class="form-group">
-        <label for="password">Password</label>
-        <input type="password" class="form-control" id="password" name="password" value="<%= user.password %>" required>
-    </div>
-    <div class="form-group">
-        <label for="role">Role</label>
-        <select class="form-control" id="role" name="role" required>
-            <option value="admin" <%= user.role === 'admin' ? 'selected' : '' %>>Admin</option>
-            <option value="user" <%= user.role === 'user' ? 'selected' : '' %>>User</option>
-        </select>
-    </div>
-    <button type="submit" class="btn btn-warning">Update</button>
-</form>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

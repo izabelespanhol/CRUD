@@ -3,21 +3,29 @@
     <thead>
         <tr>
             <th>ID</th>
-            <th>Username</th>
-            <th>Role</th>
-            <th>Actions</th>
+            <th>nome</th>
+            <th>Data de Nascimento</th>
+            <th>Login</th>
+            <th>Telefone</th>
+            <th>Documento</th>
+            <th>Genêro</th>
+            <th>Ação</th>
         </tr>
     </thead>
     <tbody>
-        <% users.forEach(user => { %>
+        <% usuarios.forEach(usuario => { %>
             <tr>
-                <td><%= user.id %></td>
-                <td><%= user.username %></td>
-                <td><%= user.role %></td>
+                <td><%= usuario.cod %></td>
+                <td><%= usuario.nome %></td>
+                <td><%= usuario.datanascimento %></td>
+                <td><%= usuario.login %></td>
+                <td><%= usuario.fone %></td>
+                <td><%= usuario.documento %></td>
+                <td><%= usuario.genero %></td>
                 <td>
-                    <a href="/users/<%= user.id %>" class="btn btn-primary">View</a>
-                    <a href="/users/<%= user.id %>/edit" class="btn btn-warning">Edit</a>
-                    <form action="/users/<%= user.id %>?_method=DELETE" method="POST" style="display: inline;">
+                    <a href="/usuarios/<%= usuario.cod %>" class="btn btn-primary">View</a>
+                    <a href="/usuarios/<%= usuario.cod %>/edit" class="btn btn-warning">Edit</a>
+                    <form action="/usuarios/<%= usuario.cod %>?_method=DELETE" method="POST" style="display: inline;">
                         <button type="submit" class="btn btn-danger">Delete</button>
                     </form>
                 </td>
