@@ -1,3 +1,4 @@
+// models/userModel.js
 const db = require('../config/db');
 
 const User = {
@@ -60,7 +61,16 @@ const User = {
             callback(null, results);
         });
     },
-};
 
+    searchByName: (name, callback) => {
+        const query = 'SELECT * FROM users WHERE username LIKE ?';
+        db.query(query, [`%${name}%`], (err, results) => {
+            if (err) {
+                return callback(err);
+            }
+            callback(null, results);
+        });
+    },    
+};
 
 module.exports = User;
