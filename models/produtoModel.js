@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 // models/produtoModel.js
+=======
+>>>>>>> ac6feb9f59f00c7c5534c262523e8ff2b7c2273e
 const db = require('../config/db');
 
 const Produto = {
@@ -56,6 +59,13 @@ const Produto = {
             callback(null, results);
         });
     },
+<<<<<<< HEAD
 };
 
 module.exports = Produto;
+=======
+    
+};
+
+module.exports = Produto;
+>>>>>>> ac6feb9f59f00c7c5534c262523e8ff2b7c2273e
